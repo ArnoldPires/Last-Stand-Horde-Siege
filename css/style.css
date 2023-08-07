@@ -32,6 +32,9 @@ h1 {
   height: 60vh;
   width: 50%;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .startScreenText {
   text-align: center;
@@ -45,4 +48,12 @@ h1 {
   font-size: 3rem;
   color: #2cc12c;
   text-shadow: -1px 4px 0 #b70909, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.playerBase {
+  background-color: black;
+  height: 3rem;
+  width: 4rem;
+}
+.hidden {
+  display: none;
 }

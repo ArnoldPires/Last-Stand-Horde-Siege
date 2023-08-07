@@ -1,8 +1,48 @@
+/* Box Model Hack */
+* {
+  box-sizing: border-box;
+}
+/* Clear fix hack */
+.clearfix:after {
+     content: ".";
+     display: block;
+     clear: both;
+     visibility: hidden;
+     line-height: 0;
+     height: 0;
+}
+.clear {
+	clear: both;
+}
 body {
   font-family: 'Creepster','Rye', cursive;
-  background-color: blueviolet;
+  background-image: url(https://rawfury.com/wp-content/uploads/2020/10/TormentorxPunisher_Key_Art_NoLogo.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+h1 {
+  text-align: center;
+  font-size: 4rem;
+  color: #2cc12c;
+  text-shadow: -1px 11px 0 #b70909, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
 }
 .arena {
   border: 4px solid black;
-
+  background-color: #808080f7;
+  height: 60vh;
+  width: 50%;
+  margin: 0 auto;
+}
+.startScreenText {
+  text-align: center;
+}
+.arena p {
+  text-shadow: -1px 1px 0 #b70909, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  font-size: 2rem;
+}
+.arena a {
+  text-decoration: none;
+  font-size: 3rem;
+  color: #2cc12c;
+  text-shadow: -1px 4px 0 #b70909, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
 }

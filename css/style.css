@@ -64,5 +64,7 @@ h1 {
 }
 
 canvas {
-  background-color: #b7090940;
+  background-image: url(https://www.textures.com/system/gallery/photos/Nature/Grass/107918/Grass0213_1_350.jpg);
+  z-index: 0;
+  user-select: none;
 }

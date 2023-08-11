@@ -18,8 +18,18 @@ const playerBase = {
 
 const enemies = [];
 const projectiles = [];
+let score = 0; // Initialize score
 
 let spawnInterval = 1500; // Initial spawn interval (1 second)
+
+function drawScore() {
+ ctx.font = 'bold 35px sans-serif';
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'black'; // Set black border color
+  ctx.lineWidth = 1; // Set border width
+  ctx.fillText(`Score: ${score}`, 20, 40); // Display score in upper left corner
+  ctx.strokeText(`Score: ${score}`, 20, 40); // Draw the border
+}
 
 function drawPlayerBase() {
   ctx.font = '50px sans-serif';
@@ -75,6 +85,7 @@ function updateProjectiles() {
       if (distance < (collisionDistance + 12.5)) { // Adjust the sum for better accuracy
         enemies.splice(i, 1);
         projectiles.splice(projectiles.indexOf(projectile), 1);
+        score++; // Increase score when enemy is hit by a projectile
         break;
       }
     }
@@ -121,6 +132,8 @@ function gameLoop() {
 
   drawProjectiles();
   updateProjectiles();
+
+  drawScore(); // Display the updated score
 
   requestAnimationFrame(gameLoop);
 }

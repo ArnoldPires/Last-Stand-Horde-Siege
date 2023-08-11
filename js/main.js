@@ -14,7 +14,10 @@ const playerBase = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   size: 180,
+  health: 100, // Initialize health
 };
+
+let isGameOver = false; // Flag to track game over state
 
 const enemies = [];
 const projectiles = [];
@@ -28,6 +31,8 @@ function drawScore() {
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 1; // Set border width
   ctx.fillText(`Score: ${score}`, 20, 40); // Display score in upper left corner
+  ctx.fillText(`High Score: 400`, 20, 120);
+  ctx.strokeText(`High Score: 400`, 20, 120);
   ctx.strokeText(`Score: ${score}`, 20, 40); // Draw the border
 }
 
@@ -44,6 +49,7 @@ function drawEnemies() {
 }
 
 function updateEnemies() {
+  if (isGameOver) return; // Stop updating enemies if game is over
   for (const enemy of enemies) {
     const dx = playerBase.x - enemy.x;
     const dy = playerBase.y - enemy.y;
@@ -54,10 +60,64 @@ function updateEnemies() {
     enemy.y += (dy / distance) * speed;
 
     if (distance < playerBase.size / 5) {
+       playerBase.health -= 10; // Reduce health when enemy reaches playerBase
       enemies.splice(enemies.indexOf(enemy), 1);
     }
   }
+  // Check if playerBase health is depleted
+  if (playerBase.health <= 0) {
+    isGameOver = true;
+  }
 }
+
+function drawHealth() {
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'black'; // Set black border color
+  ctx.lineWidth = 1; // Set border width
+  ctx.fillText(`Health: ${playerBase.health}`, 20, 80); // Display health in upper left corner
+  ctx.strokeText(`Health: ${playerBase.health}`, 20, 80); // Draw the border
+}
+
+function drawGameOverScreen() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'black'; // Set black border color
+  ctx.lineWidth = 1; // Set border width
+  ctx.fillText('Game Over', canvas.width / 2 - 80, canvas.height / 2 - 40);
+  ctx.strokeText(`Game Over`, canvas.width / 2 - 80, canvas.height / 2 - 40); // Draw the border
+
+  ctx.font = 'bold 36px sans-serif';
+  ctx.strokeStyle = 'black'; // Set black border color
+  ctx.lineWidth = 1; // Set border width
+  ctx.fillText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
+  ctx.strokeText(`Your Score:`, canvas.width / 2 - 60, canvas.height / 2);
+
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
+  ctx.strokeText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
+}
+function restartGame() {
+  isGameOver = false;
+  playerBase.health = 100;
+  enemies.length = 0;
+  projectiles.length = 0;
+  score = 0;
+  spawnInterval = 1500;
+  setTimeout(spawnEnemy, spawnInterval);
+  gameLoop();
+}
+
+canvas.addEventListener('click', () => {
+  if (isGameOver && mouse.x >= canvas.width / 2 - 80 && mouse.x <= canvas.width / 2 + 80 && mouse.y >= canvas.height / 2 + 50 && mouse.y <= canvas.height / 2 + 90) {
+    restartGame();
+  }
+});
 
 function drawProjectiles() {
   ctx.fillStyle = 'red';
@@ -126,6 +186,11 @@ canvas.addEventListener('mousemove', (event) => {
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  if (isGameOver) {
+    drawGameOverScreen();
+    return;
+  }
+
   drawPlayerBase();
   drawEnemies();
   updateEnemies();
@@ -134,6 +199,7 @@ function gameLoop() {
   updateProjectiles();
 
   drawScore(); // Display the updated score
+  drawHealth(); // Display the health
 
   requestAnimationFrame(gameLoop);
 }

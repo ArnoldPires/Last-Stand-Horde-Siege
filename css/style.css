@@ -29,7 +29,10 @@ body {
 }
 .arena {
   white-space: pre-wrap;
-  height: 88vh;
+  height: 100%;
+  padding: 5rem;
+  display: flex;
+  align-items: center;
   z-index: 2;
 }
 
@@ -42,9 +45,21 @@ h1 {
 .container {
   border: 4px solid black;
   background-color: #808080f7;
-  width: 66%;
+  width: 55%;
   height: 90vh;
   margin: 0 auto;
+  z-index: 0;
+}
+.arena-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  margin: 0 auto;
+  border: 4px solid black;
+  background-color: #808080f7;
+  width: 55%;
+  position: relative;
   z-index: 0;
 }
 .startScreenText {
@@ -67,4 +82,6 @@ canvas {
   background-image: url(https://www.textures.com/system/gallery/photos/Nature/Grass/107918/Grass0213_1_350.jpg);
   z-index: 0;
   user-select: none;
+  width: 100%;
+  height: 100%;
 }

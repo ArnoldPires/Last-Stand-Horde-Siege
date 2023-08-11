@@ -1,131 +1,169 @@
-/*
-Asset images 
-👹 👺 🤡 👻 👽 💀 ☠️ 🎃 🤖 🧟‍♀️ 🧟 🧛‍♀️ 🦇 🕷 🦂 🐉
-🏹 🏰 💰 💵 🔫  
-*/
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-document.addEventListener('DOMContentLoaded', () => {
-  const startSlayingButton = document.getElementById('startSlaying');
-  const arena = document.querySelector('.arena');
-  const container = document.querySelector('.container');
-  let canvas;
-  let canvasContext;
-  let projectiles = [];
-  let playerBaseImage;
-
-  startSlayingButton.addEventListener('click', () => {
-    // Hide start screen elements
-    arena.style.display = 'none';
-
-    // Create a new canvas element and append it to the container
-    canvas = document.createElement('canvas');
-    canvas.id = 'gameCanvas';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    container.appendChild(canvas);
-
-    // Get 2D rendering context
-    canvasContext = canvas.getContext('2d');
-
-    // Set canvas size to match its style dimensions
+  // Set canvas size to match its style dimensions
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Load the player base image
-    playerBaseImage = new Image();
-    playerBaseImage.src = 'https://cdn-icons-png.flaticon.com/512/6753/6753907.png'; // New image URL
+const mouse = {
+  x: 0,
+  y: 0,
+};
 
-    // Draw the player base image in the middle of the canvas
-    playerBaseImage.onload = () => {
-      // Scale down the image to fit within the canvas
-      const targetWidth = canvas.width * 0.05; // Adjust the scale as needed
-      const targetHeight = (playerBaseImage.height / playerBaseImage.width) * targetWidth;
-      const centerX = canvas.width / 2 - targetWidth / 2;
-      const centerY = canvas.height / 2 - targetHeight / 2;
-      canvasContext.drawImage(playerBaseImage, centerX, centerY, targetWidth, targetHeight);
+const playerBase = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  size: 180,
+};
 
-      // Handle mouse clicks on the canvas
-      canvas.addEventListener('click', (event) => {
-        // Get the click position relative to the canvas
-        const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+const enemies = [];
+const projectiles = [];
 
-        // Calculate direction vector for the projectile
-        const deltaX = clickX - (canvas.width / 2);
-        const deltaY = clickY - (canvas.height / 2);
-        const magnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const normalizedDeltaX = deltaX / magnitude;
-        const normalizedDeltaY = deltaY / magnitude;
+let spawnInterval = 1500; // Initial spawn interval (1 second)
 
-        // Add the projectile to the array with its direction
-        projectiles.push({ x: canvas.width / 2, y: canvas.height / 2, dx: normalizedDeltaX, dy: normalizedDeltaY });
+function drawPlayerBase() {
+  ctx.font = '50px sans-serif';
+  ctx.fillText('🏰', playerBase.x - 20, playerBase.y + 20);
+}
 
-        // Start the animation if not already running
-        if (projectiles.length === 1) {
-          animateShooting();
-        }
-      });
-    };
-  });
+function drawEnemies() {
+  ctx.font = '24px sans-serif';
+  for (const enemy of enemies) {
+    ctx.fillText(enemy.icon, enemy.x, enemy.y);
+  }
+}
 
-  // Function to draw the canvas and projectiles
-  function drawCanvas() {
-    // Clear the canvas
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+function updateEnemies() {
+  for (const enemy of enemies) {
+    const dx = playerBase.x - enemy.x;
+    const dy = playerBase.y - enemy.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const speed = 1; // Adjust the speed as needed
 
-    // Draw the player base image
-    const targetWidth = canvas.width * 0.05;
-    const targetHeight = (playerBaseImage.height / playerBaseImage.width) * targetWidth;
-    const centerX = canvas.width / 2 - targetWidth / 2;
-    const centerY = canvas.height / 2 - targetHeight / 2;
-    canvasContext.drawImage(playerBaseImage, centerX, centerY, targetWidth, targetHeight);
+    enemy.x += (dx / distance) * speed;
+    enemy.y += (dy / distance) * speed;
 
-    // Draw projectiles
-    canvasContext.fillStyle = 'red';
-    for (const projectile of projectiles) {
-      canvasContext.beginPath();
-      canvasContext.arc(projectile.x, projectile.y, 5, 0, Math.PI * 2);
-      canvasContext.fill();
-      canvasContext.closePath();
+    if (distance < playerBase.size / 5) {
+      enemies.splice(enemies.indexOf(enemy), 1);
     }
   }
+}
 
-  // Function to animate shooting
-  function animateShooting() {
-    const speed = 10; // Adjust speed as needed
+function drawProjectiles() {
+  ctx.fillStyle = 'red';
+  for (const projectile of projectiles) {
+    ctx.beginPath();
+    ctx.arc(projectile.x, projectile.y, 15, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
 
-    function animationLoop() {
-      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-      drawCanvas();
+function updateProjectiles() {
+  for (const projectile of projectiles) {
+    projectile.x += projectile.speedX;
+    projectile.y += projectile.speedY;
 
-      for (let i = projectiles.length - 1; i >= 0; i--) {
-        const projectile = projectiles[i];
-        projectile.x += projectile.dx * speed;
-        projectile.y += projectile.dy * speed;
+    // Check for collision with enemies
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const enemy = enemies[i];
+      const dx = enemy.x - projectile.x;
+      const dy = enemy.y - projectile.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Check if projectile is outside the canvas bounds
-        if (
-          projectile.x < 0 || projectile.x > canvas.width ||
-          projectile.y < 0 || projectile.y > canvas.height
-        ) {
-          projectiles.splice(i, 1); // Remove the projectile
-          continue;
-        }
+      const collisionDistance = 15; // Adjust the collision detection distance
 
-        canvasContext.beginPath();
-        canvasContext.arc(projectile.x, projectile.y, 5, 0, Math.PI * 2);
-        canvasContext.fill();
-        canvasContext.closePath();
-      }
-
-      if (projectiles.length > 0) {
-        requestAnimationFrame(animationLoop);
-      } else {
-        drawCanvas();
+      if (distance < (collisionDistance + 12.5)) { // Adjust the sum for better accuracy
+        enemies.splice(i, 1);
+        projectiles.splice(projectiles.indexOf(projectile), 1);
+        break;
       }
     }
 
-    animationLoop();
+    // Remove projectiles when they go off-screen
+    if (projectile.x < 0 || projectile.x > canvas.width || projectile.y < 0 || projectile.y > canvas.height) {
+      projectiles.splice(projectiles.indexOf(projectile), 1);
+    }
   }
+}
+
+function shootProjectile() {
+  const speed = 15; // Adjust the projectile speed as needed
+
+  const dx = mouse.x - playerBase.x;
+  const dy = mouse.y - playerBase.y;
+  const angle = Math.atan2(dy, dx);
+
+  const projectile = {
+    x: playerBase.x,
+    y: playerBase.y,
+    speedX: speed * Math.cos(angle),
+    speedY: speed * Math.sin(angle),
+  };
+
+  projectiles.push(projectile);
+}
+
+document.addEventListener('click', shootProjectile);
+// What a pain to figure this one out eh? Makes sure that no matter what screen size the game is played, the shooting
+// will aim accurately
+canvas.addEventListener('mousemove', (event) => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = (event.clientX - rect.left) * (canvas.width / rect.width);
+  mouse.y = (event.clientY - rect.top) * (canvas.height / rect.height);
 });
+
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawPlayerBase();
+  drawEnemies();
+  updateEnemies();
+
+  drawProjectiles();
+  updateProjectiles();
+
+  requestAnimationFrame(gameLoop);
+}
+
+function spawnEnemy() {
+  const icons = ['👹', '👺', '🤡', '👻', '👽', '💀', '☠️', '🎃', '🤖', '🧟‍♀️', '🧟', '🧛‍♀️', '🦇', '🦂', '🐉'];
+  const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+  const spawnMargin = 100; // Adjust the margin as needed
+
+  let spawnX, spawnY;
+
+  // Randomly determine which side of the canvas to spawn the enemy
+  const side = Math.floor(Math.random() * 4);
+  if (side === 0) { // Top side
+    spawnX = Math.random() * canvas.width;
+    spawnY = -spawnMargin;
+  } else if (side === 1) { // Right side
+    spawnX = canvas.width + spawnMargin;
+    spawnY = Math.random() * canvas.height;
+  } else if (side === 2) { // Bottom side
+    spawnX = Math.random() * canvas.width;
+    spawnY = canvas.height + spawnMargin;
+  } else { // Left side
+    spawnX = -spawnMargin;
+    spawnY = Math.random() * canvas.height;
+  }
+
+  const enemy = {
+    icon: randomIcon,
+    x: spawnX,
+    y: spawnY,
+  };
+  enemies.push(enemy);
+
+  // Decrease spawn interval over time
+  if (spawnInterval > 300) {
+    spawnInterval -= 10;
+  }
+
+  setTimeout(spawnEnemy, spawnInterval);
+}
+
+setTimeout(spawnEnemy, spawnInterval); // Start spawning enemies
+
+gameLoop();

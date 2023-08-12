@@ -1,39 +1,70 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
-  // Set canvas size to match its style dimensions
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-const mouse = {
-  x: 0,
-  y: 0,
-};
-
+// Set canvas size to match its style dimensions
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+const mouse = { x: 0, y: 0, }; // Picks up the mouse
 const playerBase = {
   x: canvas.width / 2,
   y: canvas.height / 2,
-  size: 180,
-  health: 100, // Initialize health
+  size: 160,  // Decides how big the playerBase is before the monsters hit it. Make it small enough to fit the base
+  health: 10, // Sets the playerBase health
 };
-
 let isGameOver = false; // Flag to track game over state
-
 const enemies = [];
 const projectiles = [];
 let score = 0; // Initialize score
 
 let spawnInterval = 1500; // Initial spawn interval (1 second)
 
+function startGame() {
+ 
+  isGameOver = false; // Reset game over state
+  playerBase.health = 100; // Reset player's health
+  playerBase.score = 0; // Reset player's score
+  enemies.length = 0; // Clear existing enemies
+  projectiles.length = 0; // Clear existing projectiles
+  spawnEnemy(); // Start spawning enemies
+  gameLoop();
+}
+
+let startTime = null;
+
+function startTimer() {
+    startTime = Date.now();
+    requestAnimationFrame(updateTimer);
+}
+
+function updateTimer() {
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - startTime;
+
+    const milliseconds = elapsedTime % 1000;
+    const seconds = Math.floor(elapsedTime / 1000) % 60;
+    const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
+    const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
+
+    const timerText = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')} : ${milliseconds.toString().padStart(3, '0')}`;
+
+    
+    context.font = '20px Arial';
+    context.fillStyle = 'black';
+    context.fillText(timerText, 10, 30);
+
+    requestAnimationFrame(updateTimer);
+}
+
+startTimer();
+
 function drawScore() {
- ctx.font = 'bold 35px sans-serif';
+  ctx.font = 'bold 35px sans-serif';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
-  ctx.lineWidth = 1; // Set border width
+  ctx.lineWidth = 2; // Set border width
   ctx.fillText(`Score: ${score}`, 20, 40); // Display score in upper left corner
-  ctx.fillText(`High Score: 400`, 20, 120);
-  ctx.strokeText(`High Score: 400`, 20, 120);
   ctx.strokeText(`Score: ${score}`, 20, 40); // Draw the border
+  ctx.fillText(`High Score: 1168`, 20, 120);
+  ctx.strokeText(`High Score: 1168`, 20, 120);
 }
 
 function drawPlayerBase() {
@@ -74,7 +105,7 @@ function drawHealth() {
   ctx.font = 'bold 36px sans-serif';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
-  ctx.lineWidth = 1; // Set border width
+  ctx.lineWidth = 2; // Set border width
   ctx.fillText(`Health: ${playerBase.health}`, 20, 80); // Display health in upper left corner
   ctx.strokeText(`Health: ${playerBase.health}`, 20, 80); // Draw the border
 }
@@ -85,23 +116,31 @@ function drawGameOverScreen() {
   ctx.font = 'bold 36px sans-serif';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
-  ctx.lineWidth = 1; // Set border width
+  ctx.lineWidth = 2; // Set border width
   ctx.fillText('Game Over', canvas.width / 2 - 80, canvas.height / 2 - 40);
   ctx.strokeText(`Game Over`, canvas.width / 2 - 80, canvas.height / 2 - 40); // Draw the border
 
   ctx.font = 'bold 36px sans-serif';
   ctx.strokeStyle = 'black'; // Set black border color
-  ctx.lineWidth = 1; // Set border width
+  ctx.lineWidth = 2; // Set border width
   ctx.fillText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
   ctx.strokeText(`Your Score:`, canvas.width / 2 - 60, canvas.height / 2);
+
+  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+  ctx.lineWidth = 2; // Set border width
+  ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.fillText(`You survived for: ${elapsedTime} s`, canvas.width / 2 - 60, canvas.height / 2 + 120);
 
   ctx.font = 'bold 36px sans-serif';
   ctx.fillText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
   ctx.strokeText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
   ctx.strokeStyle = 'black';
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2; // Set border width
   ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
 }
+
 function restartGame() {
   isGameOver = false;
   playerBase.health = 100;
@@ -183,14 +222,14 @@ canvas.addEventListener('mousemove', (event) => {
   mouse.y = (event.clientY - rect.top) * (canvas.height / rect.height);
 });
 
-function gameLoop() {
+function gameLoop() { 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (isGameOver) {
     drawGameOverScreen();
     return;
   }
-
+  
   drawPlayerBase();
   drawEnemies();
   updateEnemies();

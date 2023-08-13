@@ -15,7 +15,7 @@ const enemies = [];
 const projectiles = [];
 let score = 0; // Initialize score
 
-let spawnInterval = 1500; // Initial spawn interval (1 second)
+let spawnInterval = 2000; // Initial spawn interval (1 second)
 
 function startGame() {
  
@@ -32,14 +32,7 @@ let startTime = null;
 
 function startTimer() {
     startTime = Date.now();
-    requestAnimationFrame(updateTimer);
 }
-
-function updateTimer() {
-  const currentTime = Date.now();
-  requestAnimationFrame(updateTimer);
-}
-
 startTimer();
 
 function drawScore() {
@@ -49,17 +42,17 @@ function drawScore() {
   ctx.lineWidth = 2; // Set border width
   ctx.fillText(`Score: ${score}`, 20, 40); // Display score in upper left corner
   ctx.strokeText(`Score: ${score}`, 20, 40); // Draw the border
-  ctx.fillText(`High Score: 1168`, 20, 120);
-  ctx.strokeText(`High Score: 1168`, 20, 120);
+  ctx.fillText(`High Score: 2057`, 20, 120);
+  ctx.strokeText(`High Score: 2057`, 20, 120);
 }
 
 function drawPlayerBase() {
-  ctx.font = '50px Creepster';
-  ctx.fillText('🏰', playerBase.x - 20, playerBase.y + 20);
+  ctx.font = '70px Creepster';
+  ctx.fillText('🏰', playerBase.x - 10, playerBase.y + 10);
 }
 
 function drawEnemies() {
-  ctx.font = '24px Creepster';
+  ctx.font = '50px Creepster';
   for (const enemy of enemies) {
     ctx.fillText(enemy.icon, enemy.x, enemy.y);
   }
@@ -149,7 +142,7 @@ function drawProjectiles() {
   ctx.fillStyle = 'red';
   for (const projectile of projectiles) {
     ctx.beginPath();
-    ctx.arc(projectile.x, projectile.y, 15, 0, Math.PI * 2);
+    ctx.arc(projectile.x, projectile.y, 20, 0, Math.PI * 2);
     ctx.fill();
   }
 }
@@ -166,9 +159,9 @@ function updateProjectiles() {
       const dy = enemy.y - projectile.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      const collisionDistance = 15; // Adjust the collision detection distance
+      const collisionDistance = 30; // Adjust the collision detection distance
 
-      if (distance < (collisionDistance + 12.5)) { // Adjust the sum for better accuracy
+      if (distance < (collisionDistance + 15.5)) { // Adjust the sum for better accuracy
         enemies.splice(i, 1);
         projectiles.splice(projectiles.indexOf(projectile), 1);
         score++; // Increase score when enemy is hit by a projectile

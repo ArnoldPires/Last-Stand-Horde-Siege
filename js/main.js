@@ -36,28 +36,14 @@ function startTimer() {
 }
 
 function updateTimer() {
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - startTime;
-
-    const milliseconds = elapsedTime % 1000;
-    const seconds = Math.floor(elapsedTime / 1000) % 60;
-    const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
-    const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
-
-    const timerText = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')} : ${milliseconds.toString().padStart(3, '0')}`;
-
-    
-    context.font = '20px Arial';
-    context.fillStyle = 'black';
-    context.fillText(timerText, 10, 30);
-
-    requestAnimationFrame(updateTimer);
+  const currentTime = Date.now();
+  requestAnimationFrame(updateTimer);
 }
 
 startTimer();
 
 function drawScore() {
-  ctx.font = 'bold 35px sans-serif';
+  ctx.font = 'bold 35px Creepster';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 2; // Set border width
@@ -68,12 +54,12 @@ function drawScore() {
 }
 
 function drawPlayerBase() {
-  ctx.font = '50px sans-serif';
+  ctx.font = '50px Creepster';
   ctx.fillText('🏰', playerBase.x - 20, playerBase.y + 20);
 }
 
 function drawEnemies() {
-  ctx.font = '24px sans-serif';
+  ctx.font = '24px Creepster';
   for (const enemy of enemies) {
     ctx.fillText(enemy.icon, enemy.x, enemy.y);
   }
@@ -102,7 +88,7 @@ function updateEnemies() {
 }
 
 function drawHealth() {
-  ctx.font = 'bold 36px sans-serif';
+  ctx.font = 'bold 36px Creepster';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 2; // Set border width
@@ -113,27 +99,28 @@ function drawHealth() {
 function drawGameOverScreen() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = 'bold 36px sans-serif';
+  ctx.font = 'bold 36px Creepster';
   ctx.fillStyle = 'white';
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 2; // Set border width
   ctx.fillText('Game Over', canvas.width / 2 - 80, canvas.height / 2 - 40);
   ctx.strokeText(`Game Over`, canvas.width / 2 - 80, canvas.height / 2 - 40); // Draw the border
 
-  ctx.font = 'bold 36px sans-serif';
+  ctx.font = 'bold 36px Creepster';
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 2; // Set border width
   ctx.fillText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
-  ctx.strokeText(`Your Score:`, canvas.width / 2 - 60, canvas.height / 2);
+  ctx.strokeText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
 
   const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-  ctx.lineWidth = 2; // Set border width
-  ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
   ctx.fillStyle = 'white';
-  ctx.font = 'bold 24px sans-serif';
+  ctx.font = 'bold 36px Creepster';
   ctx.fillText(`You survived for: ${elapsedTime} s`, canvas.width / 2 - 60, canvas.height / 2 + 120);
+  ctx.lineWidth = 2; // Set border width
+  ctx.strokeText(`You survived for: ${elapsedTime} s`,canvas.width / 2 - 60, canvas.height / 2 + 120);
+  ctx.strokeStyle = 'black'; // Set black border color
 
-  ctx.font = 'bold 36px sans-serif';
+  ctx.font = 'bold 36px Creepster';
   ctx.fillText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
   ctx.strokeText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
   ctx.strokeStyle = 'black';

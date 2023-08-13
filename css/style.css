@@ -25,6 +25,7 @@ body {
   height: 100%;
   background-image: url("https://rawfury.com/wp-content/uploads/2020/10/TormentorxPunisher_Key_Art_NoLogo.png");
   background-size: cover;
+  background-attachment: fixed; /* Keep the background fixed */
   z-index: -1;
 }
 .arena {
@@ -84,4 +85,25 @@ canvas {
   user-select: none;
   width: 100%;
   height: 100%;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .container,
+  .arena-container {
+    width: 90%;
+  }
+
+  .arena p {
+    font-size: 1.2rem;
+  }
+
+  .arena a {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+  }
 }

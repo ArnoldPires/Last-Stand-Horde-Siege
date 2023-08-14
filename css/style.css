@@ -87,7 +87,12 @@ canvas {
 }
 
 /* Media Queries */
-@media (max-width: 768px) {
+@media (max-width: 1490px) {
+  .arena p {
+    font-size: 2.2rem;
+  }
+}
+@media (max-width: 977px) {
   .container {
     width: 80%;
   }
@@ -98,14 +103,14 @@ canvas {
     font-size: 3rem;
   }
   .arena p {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   .arena a {
     font-size: 2rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
   .container {
     height: auto;
     width: 90%;

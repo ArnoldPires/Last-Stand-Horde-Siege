@@ -262,6 +262,33 @@ function spawnEnemy() {
   setTimeout(spawnEnemy, spawnInterval);
 }
 
+// Function to adjust canvas element sizes based on screen size
+function adjustCanvasElementsSize() {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+
+  // Calculate adjusted sizes based on canvas dimensions
+  const adjustedPlayerBaseSize = Math.min(canvasWidth, canvasHeight) * 0.2; // Adjust the factor as needed
+  const adjustedProjectileRadius = Math.min(canvasWidth, canvasHeight) * 0.01; // Adjust the factor as needed
+
+  // Update playerBase size and other element sizes
+  playerBase.size = adjustedPlayerBaseSize;
+  // Update other element properties accordingly
+
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // Redraw elements with adjusted sizes
+  drawPlayerBase();
+  drawEnemies();
+  drawProjectiles();
+  // Draw other elements as needed
+}
+
+// Call the function initially and on window resize
+adjustCanvasElementsSize();
+window.addEventListener('resize', adjustCanvasElementsSize);
+
 setTimeout(spawnEnemy, spawnInterval); // Start spawning enemies
 
 gameLoop();

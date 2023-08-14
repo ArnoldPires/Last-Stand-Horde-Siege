@@ -29,11 +29,10 @@ body {
   z-index: -1;
 }
 .arena {
+  display: flex;
   white-space: pre-wrap;
   height: 100%;
   padding: 5rem;
-  display: flex;
-  align-items: center;
   z-index: 2;
 }
 
@@ -87,23 +86,45 @@ canvas {
   height: 100%;
 }
 
-/* Media Query for Mobile Devices */
+/* Media Queries */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 2.5rem;
+  .container {
+    width: 80%;
   }
-
-  .container,
   .arena-container {
+    width: 80%;
+  }
+  h1 {
+    font-size: 3rem;
+  }
+  .arena p {
+    font-size: 1.5rem;
+  }
+  .arena a {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    height: auto;
     width: 90%;
   }
-
+  .arena {
+    padding: 0;
+  }
+  .arena-container {
+    width: 90%;
+    height: 85vh;
+  }
+  h1 {
+    font-size: 2rem;
+    padding-bottom: 1rem;
+  }
   .arena p {
     font-size: 1.2rem;
   }
-
   .arena a {
-    font-size: 1.5rem;
-    padding: 0.5rem;
+    font-size: 1.8rem;
   }
 }

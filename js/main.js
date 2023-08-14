@@ -141,7 +141,7 @@ canvas.addEventListener('mousemove', (event) => {
 // Creates an empty array to store all information about the monsters
 const monsters = [];
 // This variable sets up how fast the monsters will spawn. Lower = faster higher = slower
-let spawnInterval = 2000; // Initial spawn interval (1 second)
+let spawnInterval = 1200; // Initial spawn interval (1 second)
 
 function spawnMonsters() {
   ctx.font = '50px Creepster';
@@ -277,7 +277,7 @@ function restartGame() {
   monsters.length = 0;
   projectiles.length = 0;
   score = 0;
-  spawnInterval = 2000;
+  spawnInterval = 1200;
   setTimeout(spawnMonster, spawnInterval);
   gameLoop();
 }

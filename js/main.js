@@ -272,14 +272,8 @@ function drawGameOverScreen() {
                     /* Restart the game */
 
 function restartGame() {
-  isGameOver = false;
-  playerBase.health = 100;
-  monsters.length = 0;
-  projectiles.length = 0;
-  score = 0;
-  spawnInterval = 1200;
-  setTimeout(spawnMonster, spawnInterval);
-  gameLoop();
+  // Redirect to the index.html page
+  window.location.href = 'index.html';
 }
 
 canvas.addEventListener('click', () => {

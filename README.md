@@ -37,9 +37,15 @@
 <p>Powerups</p>
 <p>Particle effects</p>
 <p>Better mobile version</p>
-<p>Voice over effects</p
+<p>Voice over effects</p>
+<hr>
 <h2>Assets used:</h2>
 <p>Background Image comes from a game called Torment X Punisher.</p>
 <p>Voice over is actually my voice</p>
 <p>Music is from a game called Hotline Miami</p>
 <p>For now, I just used emoji's for the base and monsters</p>
+<hr>
+<h2>Resources that helped me:</h2>
+<p><a href="https://www.youtube.com/watch?v=sH5A520rqiQ&ab_channel=6PackProgrammer">Bring Your Game to Life: Create a 2D Shooting Game with JavaScript & HTML Canvas</a></p>
+<p><a href="https://www.youtube.com/watch?v=eI9idPTT0c4&ab_channel=ChrisCourses">HTML5 Canvas and JavaScript Game Tutorial</a></p>
+<p><a href="https://www.youtube.com/watch?v=QxYg8-mhhhs&ab_channel=Frankslaboratory">JavaScript Game Tutorial - 2D Tower Defense</a></p>

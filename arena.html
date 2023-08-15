@@ -9,15 +9,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Rye&display=swap" rel="stylesheet">
+  <script defer src="js/main.js"></script>
 </head>
 <body>
     <h1>Last Stand: Horde Siege</h1>
-    <audio autoplay loop>
-        <source src="vengeance.mp3" type="audio/mp3">
-      </audio>
     <section class="arena-container">
+      <audio id="music" controls autoplay loop volume="0.1">
+      <source src="vengeance.mp3" type="audio/mp3">
+      </audio>
       <canvas id="gameCanvas"></canvas>
   </section>
 </body>
-<script src="js/main.js"></script>
 </html>

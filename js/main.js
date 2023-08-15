@@ -8,13 +8,19 @@ canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 // Picks up the mouse coordinates so when you shoot, it will shoot depending on where those coordinates are
 const mouse = { x: 0, y: 0, };
-
 // Since the game has a game over state, once you start it, it must be flagged as either false or true.
 // When starting the game for the first time, it must be false, until a game over state is triggered through a loss.
 let isGameOver = false;
 // Creates an empty array to store all information about shooting projectiles at the monsters
 const projectiles = [];
 let startTime = null;
+// Intitializes the score variable. Game will start with 0 points and go up higher as the player continues to kill
+// monsters
+let score = 0; 
+// Creates an empty array to store all information about the monsters
+const monsters = [];
+// This variable sets up how fast the monsters will spawn. Lower = faster higher = slower
+let spawnInterval = 800; // Initial spawn interval (1 second)
 
 // When you click on "Click To Slay" in the index.html it will transfer you over to the arena.html
 // and the game should immediately start. When it starts the player health, score, projectiles, monsters, etc
@@ -39,7 +45,6 @@ function startGame() {
 
 const music = document.getElementById('music');
 music.volume = 0.1
-
 
                     /* Player */
 
@@ -146,11 +151,6 @@ canvas.addEventListener('mousemove', (event) => {
 
                     /* Monsters */
 
-// Creates an empty array to store all information about the monsters
-const monsters = [];
-// This variable sets up how fast the monsters will spawn. Lower = faster higher = slower
-let spawnInterval = 1200; // Initial spawn interval (1 second)
-
 function spawnMonsters() {
   ctx.font = '40px Creepster';
   for (const monster of monsters) {
@@ -221,10 +221,6 @@ function spawnMonster() {
 setTimeout(spawnMonster, spawnInterval);
 
                     /* Scoring */
-
-// Intitializes the score variable. Game will start with 0 points and go up higher as the player continues to kill
-// monsters
-let score = 0; 
 
 // Displays the players score and the current high score 
 function playerScore() {

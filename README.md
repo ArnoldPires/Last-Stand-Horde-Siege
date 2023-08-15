@@ -1,5 +1,6 @@
 # Last-Stand-Horde-Siege
 <p>Week 6: Mod 1: The Game</p>
+<a href="https://arnaldopires.com/Last-Stand-Horde-Siege/">Play the game here</a>
 <img src="images/lastStandHordeSeige.JPG"/>
 <p>This game was created as a school project for the web development course at Per Scholas.</p>
 <p>This is my current work in progress verison of the ever popular and newish reverse bullet hell genre of games/ tower defense</p>

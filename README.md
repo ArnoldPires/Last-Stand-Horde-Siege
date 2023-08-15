@@ -4,6 +4,7 @@
 <img src="images/lastStandHordeSeige.JPG"/>
 <p>This game was created as a school project for the web development course at Per Scholas.</p>
 <p>This is my current work in progress verison of the ever popular and newish reverse bullet hell genre of games/ tower defense</p>
+<p>This game isn't done, there are missing features and lots of bugs. The game isn't perfect on different devices.</p>
 <p>The main objective of the game is to survive as long as possible, while racking up a high score</p>
 <p>More features to come....</p>
 <hr>

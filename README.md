@@ -38,3 +38,8 @@
 <p>Particle effects</p>
 <p>Better mobile version</p>
 <p>Voice over effects</p
+<h2>Assets used:</h2>
+<p>Background Image comes from a game called Torment X Punisher.</p>
+<p>Voice over is actually my voice</p>
+<p>Music is from a game called Hotline Miami</p>
+<p>For now, I just used emoji's for the base and monsters</p>

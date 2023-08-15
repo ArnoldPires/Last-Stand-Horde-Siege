@@ -28,11 +28,18 @@ function startGame() {
   monsters.length = 0;
 // Makes sure all projectitles go away on restart of a new game
   projectiles.length = 0; // Clear existing projectiles
+  startTime = Date.now();
 // Makes sure the spawning of monsters starts up immediately once a game starts
   spawnMonster();
 // Triggers all the other functions inside of it. Creating the illusion of continuous gameplay
   gameLoop();
 }
+
+                    /* Music */
+
+const music = document.getElementById('music');
+music.volume = 0.1
+
 
                     /* Player */
 
@@ -50,7 +57,7 @@ const playerBase = {
 // Creates the players base and places it in the middle of the screen
 // Sets up how large the base will be, considering it is a letter emoji for now
 function spawnPlayerBase() {
-  ctx.font = '70px Creepster';
+  ctx.font = '65px Creepster';
   ctx.fillText('🏰', playerBase.x - 50, playerBase.y + 30);
 }
 // The players health, styling of text, and position of the text on the canvas
@@ -75,7 +82,7 @@ function drawProjectiles() {
 // Creates a path for the projectitle. Once you click on a spot, the path gets created, and the projectitle
 // starts traveling that path
     ctx.beginPath();
-    ctx.arc(projectile.x, projectile.y, 20, 0, Math.PI * 2);
+    ctx.arc(projectile.x, projectile.y, 15, 0, Math.PI * 2);
 // This adds the defined shape of the projectitle and the color
     ctx.fill();
   }
@@ -98,6 +105,7 @@ function shootProjectile() {
   projectiles.push(projectile);
 }
 
+// 
 function updateProjectiles() {
   for (const projectile of projectiles) {
     projectile.x += projectile.speedX;
@@ -112,7 +120,7 @@ function updateProjectiles() {
 
       const collisionDistance = 30; // Adjust the collision detection distance
 
-      if (distance < (collisionDistance + 15.5)) { // Adjust the sum for better accuracy
+      if (distance < (collisionDistance + 16)) { // Adjust the sum for better accuracy
         monsters.splice(i, 1);
         projectiles.splice(projectiles.indexOf(projectile), 1);
         score++; // Increase score when monster is hit by a projectile
@@ -144,7 +152,7 @@ const monsters = [];
 let spawnInterval = 1200; // Initial spawn interval (1 second)
 
 function spawnMonsters() {
-  ctx.font = '50px Creepster';
+  ctx.font = '40px Creepster';
   for (const monster of monsters) {
     ctx.fillText(monster.emoji, monster.x, monster.y);
   }
@@ -156,30 +164,29 @@ function updateMonsters() {
     const dx = playerBase.x - monster.x;
     const dy = playerBase.y - monster.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const speed = 1; // Adjust the speed as needed
+    const speed = 1; // Monster movement speed
 
     monster.x += (dx / distance) * speed;
     monster.y += (dy / distance) * speed;
 
     if (distance < playerBase.size / 5) {
-       playerBase.health -= 30; // Reduce health when monster reaches playerBase
+       playerBase.health -= 30; // Reduce health when monster reaches playerBase to attack
       monsters.splice(monsters.indexOf(monster), 1);
     }
   }
-  // Check if playerBase health is depleted
+  // Check if playerBase health is depleted. If it is, thats a game over
   if (playerBase.health <= 0) {
     isGameOver = true;
   }
 }
-
+// An array with all the different monsters that will be attacking the player
 function spawnMonster() {
-  const emojis = ['👹', '👺', '🤡', '👻', '👽', '💀', '☠️', '🎃', '🤖', '🧟‍♀️', '🧟', '🧛‍♀️', '🦇', '🦂', '🐉'];
-  const randomIcon = emojis[Math.floor(Math.random() * emojis.length)];
-
-  const spawnMargin = 100; // Adjust the margin as needed
+  const monsterIcon = ['👹', '👺', '🤡', '👻', '👽', '💀', '☠️', '🎃', '🤖', '🧟‍♀️', '🧟', '🧛‍♀️', '🦇', '🦂', '🐉'];
+  const randomMonster = monsterIcon [Math.floor(Math.random() * monsterIcon.length)];
+// 
+  const spawnMargin = 70; 
 
   let spawnX, spawnY;
-
   // Randomly determine which side of the canvas to spawn the monster
   const side = Math.floor(Math.random() * 4);
   if (side === 0) { // Top side
@@ -195,22 +202,23 @@ function spawnMonster() {
     spawnX = -spawnMargin;
     spawnY = Math.random() * canvas.height;
   }
-
+// Makes it so any of the monsters will be picked for any random side of the screen
   const monster = {
-    emoji: randomIcon,
+    emoji: randomMonster,
     x: spawnX,
     y: spawnY,
   };
+// Keeps adding more and more monsters 
   monsters.push(monster);
 
   // Decrease spawn interval over time
   if (spawnInterval > 250) {
     spawnInterval -= 10;
   }
-
   setTimeout(spawnMonster, spawnInterval);
 }
-setTimeout(spawnMonster, spawnInterval); // Start spawning monsters
+// Start spawning monsters
+setTimeout(spawnMonster, spawnInterval);
 
                     /* Scoring */
 
@@ -218,6 +226,7 @@ setTimeout(spawnMonster, spawnInterval); // Start spawning monsters
 // monsters
 let score = 0; 
 
+// Displays the players score and the current high score 
 function playerScore() {
   ctx.font = 'bold 35px Creepster';
   ctx.fillStyle = 'white';
@@ -242,30 +251,39 @@ startTimer();
 function drawGameOverScreen() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = 'bold 36px Creepster';
-  ctx.fillStyle = 'white';
+  ctx.font = 'bold 36px Creepster'; // Font
+  ctx.fillStyle = 'white'; // Color of font
   ctx.strokeStyle = 'black'; // Set black border color
   ctx.lineWidth = 2; // Set border width
-  ctx.fillText('Game Over', canvas.width / 2 - 80, canvas.height / 2 - 40);
-  ctx.strokeText(`Game Over`, canvas.width / 2 - 80, canvas.height / 2 - 40); // Draw the border
+  ctx.fillText('Game Over', canvas.width / 2 - 80, canvas.height / 2 - 40); // The text
+  ctx.strokeText(`Game Over`, canvas.width / 2 - 80, canvas.height / 2 - 40); // The border on the text
 
-  ctx.fillText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
-  ctx.strokeText(`Your Score: ${score}`, canvas.width / 2 - 60, canvas.height / 2);
+  ctx.fillText(`Your Score: ${score}`, canvas.width / 2 - 80, canvas.height / 2);
+  ctx.strokeText(`Your Score: ${score}`, canvas.width / 2 - 80, canvas.height / 2);
 
-  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-  ctx.fillText(`You survived for: ${elapsedTime} s`, canvas.width / 2 - 60, canvas.height / 2 + 120);
-  ctx.strokeText(`You survived for: ${elapsedTime} s`, canvas.width / 2 - 60, canvas.height / 2 + 120);
+// Calculate the time in minutes and seconds
+  const timer = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  const minSecTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+// Display the timer on game over screen
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 36px Creepster';
+  ctx.fillText(`You survived for: ${minSecTime}`, canvas.width / 2 - 140, canvas.height / 2 + 160);
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.strokeText(`You survived for: ${minSecTime}`, canvas.width / 2 - 140, canvas.height / 2 + 160);
+// This is the "Play Again?" button
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2; 
+  ctx.fillText('Play Again?', canvas.width / 2 - 80, canvas.height / 2 + 40);
+  ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
+  ctx.strokeText('Play Again?', canvas.width / 2 - 80, canvas.height / 2 + 40);
 
-  // Draw the "Play Again?" button with text
-  ctx.strokeStyle = '#b70909';
-  ctx.lineWidth = 2; // Set border width
-  ctx.fillText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
-  ctx.strokeText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
-
-  // Draw the border for the button
+// This is the actual play again button
   ctx.fillStyle = '#2cc12c';
-  ctx.lineWidth = 2; // Set border width
-  ctx.fillText('Play Again?', canvas.width / 2 - 60, canvas.height / 2 + 40);
+  ctx.lineWidth = 2; 
+  ctx.fillText('Play Again?', canvas.width / 2 - 80, canvas.height / 2 + 40);
   ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 + 50, 160, 40);
 }
 
@@ -275,12 +293,14 @@ function restartGame() {
   // Redirect to the index.html page
   window.location.href = 'index.html';
 }
-
+// Listens for a click event to sigal for the game to restart. Triggers the restartgame function
 canvas.addEventListener('click', () => {
   if (isGameOver && mouse.x >= canvas.width / 2 - 80 && mouse.x <= canvas.width / 2 + 80 && mouse.y >= canvas.height / 2 + 50 && mouse.y <= canvas.height / 2 + 90) {
     restartGame();
   }
 });
+
+                    /* Game Loop */
 
 function gameLoop() { 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -288,13 +308,30 @@ function gameLoop() {
     drawGameOverScreen();
     return;
   }
-  spawnPlayerBase();
-  spawnMonsters();
-  updateMonsters();
-  drawProjectiles();
-  updateProjectiles();
+  spawnPlayerBase(); // Spawns the base
+  spawnMonsters(); // Spawns the monster
+  updateMonsters(); // When a monster dies gives a point
+  drawProjectiles(); // Creates the projectitle on mouse click
+  updateProjectiles(); // Makes sure the projectitles don't continue to exist after being shot
   playerScore(); // Display the updated score
   drawHealth(); // Display the health
+
+                   /* Timer */
+
+// Calculate elapsed time in minutes and seconds
+  const timer = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  const minSecTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  // Display formatted elapsed time on main game screen
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.font = 'bold 36px Creepster';
+  ctx.fillText(`Time: ${minSecTime}`, 20, canvas.height - 20);
+  ctx.strokeText(`Time: ${minSecTime}`, 20, canvas.height - 20);
+
   requestAnimationFrame(gameLoop);
 }
 gameLoop();

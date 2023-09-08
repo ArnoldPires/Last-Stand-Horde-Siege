@@ -10,7 +10,7 @@
 <hr>
 <h2>How to play:</h2>
 <p>Once you click on "Click to Slay!" You will be brought to your base.</p>
-<p>Project your base at all costs by clicking on the incoming monsters that will rapidly approach your base.</p>
+<p>Protect your base at all costs by clicking on the incoming monsters that will rapidly approach your base.</p>
 <p>Clicking on them will shoot out a projectile.</p>
 <p>Killing monsters give you points.</p>
 <p>Keep doing this until you are defeated.</p>
